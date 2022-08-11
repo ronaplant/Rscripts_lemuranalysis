@@ -1,0 +1,13 @@
+da> library(readxl)
+> lemur_data1 <- read_excel("datasets/lemur_data1.xlsx")
+> View(lemur_data1)
+
+> boxplot(Ni~SPECIES, data=lemur_data1, main="Ni concentration by species", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+
+> boxplot(Co~SPECIES, data=lemur_data1, main="Co concentration by species", 
+         xlab="Lemur species", )ylab="Co concentration (ng/ml)")
+
+> ggplot(data=lemur_distance_data1, mapping=aes(x=distance_m, y=ni_ngml, color=SPECIES))
+ +geom_point()+mytheme+labs(x= "Distance (m) from mine area (central point)", 
+y= "Ni concentration (ng/ml)", title= "Ni conc x Distance from mine by species")

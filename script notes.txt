@@ -1,0 +1,21 @@
+#import data set from excel
+AMSA_DATA_merged_vits_mins_for_students_2020_05_10 <- read_excel("datasets/AMSA DATA merged vits_mins for students 2020_05_10.xlsx")
+
+#rename data set
+AMSA_DATA_merged_vits_mins_for_students_2020_05_10->lemur_data
+
+#remove surplus data set
+remove(AMSA_DATA_merged_vits_mins_for_students_2020_05_10)
+
+
+
+
+Attempt 2
+> library(readxl)
+> lemur_data1 <- read_excel("datasets/lemur_data1.xlsx")
+> View(lemur_data1)
+
+> boxplot(Ni~SPECIES, data=lemur_data1, main="Ni concentration by species", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)"
+)
+

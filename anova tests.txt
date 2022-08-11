@@ -1,0 +1,244 @@
+> lemur_anova<-aov(Ni~SPECIES, data=lemur_data1)
+> summary(lemur_anova)
+             Df Sum Sq Mean Sq F value Pr(>F)    
+SPECIES       3   3085  1028.5   34.46 <2e-16 ***
+Residuals   229   6835    29.8                   
+---
+> TukeyHSD(lemur_anova)
+
+> TukeyHSD(lemur_anova)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = Ni ~ SPECIES, data = lemur_data1)
+
+$SPECIES
+                               diff        lwr        upr     p adj
+I. indri-A. laniger      -5.5972681  -8.330232 -2.8643042 0.0000016
+L. mustelinus-A. laniger  0.5917333  -2.792437  3.9759034 0.9690868
+P. diadema-A. laniger    -7.8561161 -10.123853 -5.5883792 0.0000000
+L. mustelinus-I. indri    6.1890014   2.628830  9.7491731 0.0000639
+P. diadema-I. indri      -2.2588480  -4.781713  0.2640166 0.0971146
+P. diadema-L. mustelinus -8.4478494 -11.664736 -5.2309625 0.0000000
+
+
+
+> geology_anova<-aov(Ni__ng_ml_~geology, data=lemurs_geology)
+> summary(geology_anova)
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+geology       3    656  218.74   6.316 0.000402 ***
+Residuals   212   7343   34.63                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+17581 observations deleted due to missingness
+> TukeyHSD(geology_anova)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = Ni__ng_ml_ ~ geology, data = lemurs_geology)
+
+$geology
+                            diff         lwr       upr     p adj
+Peridotite-Gabbro      2.3936560  -0.5442391  5.331551 0.1532889
+Pyroxenite-Gabbro      6.3499575   2.3106589 10.389256 0.0003827
+Syenite-Gabbro         0.6936803  -2.1483920  3.535753 0.9216172
+Pyroxenite-Peridotite  3.9563014  -0.6639153  8.576518 0.1218294
+Syenite-Peridotite    -1.6999758  -5.3204516  1.920500 0.6174480
+Syenite-Pyroxenite    -5.6562772 -10.2161621 -1.096392 0.0082312
+
+
+> iron_ni_anova<-aov(nickel~iron), data=lemur_data_with_feniratio)
+Error: unexpected ',' in "iron_ni_anova<-aov(nickel~iron),"
+> iron_ni_anova<-aov(nickel~iron, data=lemur_data_with_feniratio)
+> summary(iron_ni_anova)
+             Df Sum Sq Mean Sq F value Pr(>F)  
+iron        159   7690   48.36   1.583 0.0141 *
+Residuals    73   2231   30.56                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+
+#correlating distance against ni concentration per year
+
+> lemurdist2012_anova<-aov(nickel~dist, data=lemur_distances2012)
+> summary(lemurdist2012_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1   2.94   2.936   0.976  0.331
+Residuals   30  90.30   3.010   
+
+lemurdist2013_anova<-aov(nickel~dist, data=lemur_distances2013)
+lemurdist2014_anova<-aov(nickel~dist, data=lemur_distances2014)
+lemurdist2015_anova<-aov(nickel~dist, data=lemur_distances2015)
+lemurdist2016_anova<-aov(nickel~dist, data=lemur_distances2016)
+lemurdist2017_anova<-aov(nickel~dist, data=lemur_distances2017)
+
+#POSSIBLY IGNORE AS THESE DISTANCES MEASURED VIA CENTRAL POINT RATHER
+THAN POINTS ALONG MINE BOUNDARIES
+> summary(lemurdist2013_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1   22.1   22.14   1.079  0.303
+Residuals   57 1169.2   20.51      
+
+> summary(lemurdist2014_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1    5.8    5.84   0.106  0.747
+Residuals   52 2877.4   55.34      
+
+> summary(lemurdist2014_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1    5.8    5.84   0.106  0.747
+Residuals   52 2877.4   55.34   
+
+> summary(lemurdist2015_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1    4.3   4.335   0.191  0.666
+Residuals   30  682.4  22.748   
+
+> summary(lemurdist2016_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1  163.9   163.9   1.209   0.29
+Residuals   14 1898.7   135.6 
+
+> summary(lemurdist2017_anova)
+            Df Sum Sq Mean Sq F value Pr(>F)
+dist         1   5.09   5.087   1.951  0.174
+Residuals   26  67.78   2.607      
+
+#comparing geophagy and non geophagy species
+
+#return tables with only specified species
+> distance_data_geophagy<-distance_by_points_excel[distance_by_points_excel$SPECIES=="P. diadema"]
+> view(distance_data_geophagy)
+> distance_data_geophag2y<-distance_by_points_excel[distance_by_points_excel$SPECIES=="I. indri"]
+
+#convert to data tables
+> distance_data_geophag2y<-as.data.table(distance_data_geophag2y)
+> distance_data_geophagy<-as.data.table(distance_data_geophagy)
+
+#merge the tables
+> distdata_geophagy<-dplyr::full_join(distance_data_geophag2y, distance_data_geophagy)
+Joining, by = c("fid", "TVY_NUMBER", "ALT_ID", "SPECIES", "GROUP", "CAP_DATE", "CAP_NUM", 
+"CAP_YEAR", "CAP_SEASON", "SEX", "AGE_EST", "CAP_REGION", "CAPTURE", "CAPTURE_1", "CAPTURE_12", "Vitamin_A", "Beta_Carot", 
+"Vitamin_E", "25_Hydroxy", "Fe___ug_dL", "Se__ng_mL_", "Co__ng_mL_", "Cu__ug_mL_", "Mn___ng_mL", "Mo____ng_m", "Zn___ug_mL", "ni", 
+"Mg__mg_dL_", "HubName", "HubDist_m", "HubDist_km")
+> view(distdata_geophagy)
+
+#repeat for remaining species
+> distance_data_nongeoph<-distance_by_points_excel[distance_by_points_excel$SPECIES=="L. mustelinus"]
+> distance_data_nongeoph1<-distance_by_points_excel[distance_by_points_excel$SPECIES=="A. laniger"]
+> view(distance_data_nongeoph)
+> view(distance_data_nongeoph1)
+> mergedist_data_nongeoph<-dplyr::full_join(distance_data_nongeoph, distance_data_nongeoph1)
+Joining, by = c("fid", "TVY_NUMBER", "ALT_ID", "SPECIES", "GROUP", "CAP_DATE", "CAP_NUM", "CAP_YEAR", "CAP_SEASON", "SEX", "AGE_EST", "CAP_REGION", "CAPTURE", "CAPTURE_1", "CAPTURE_12", "Vitamin_A", "Beta_Carot", "Vitamin_E", "25_Hydroxy", "Fe___ug_dL", "Se__ng_mL_", "Co__ng_mL_", "Cu__ug_mL_", "Mn___ng_mL", "Mo____ng_m", "Zn___ug_mL", "ni", "Mg__mg_dL_", "HubName", "HubDist_m", "HubDist_km")
+> view(mergedist_data_nongeoph)
+
+> ggplot(data=distdata_geophagy, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+`geom_smooth()` using formula 'y ~ x'
+> ggplot(data=distdata_geophagy, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc geophagy species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+`geom_smooth()` using formula 'y ~ x'
+> ggplot(data=distdata_geophagy, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc geophagy species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")
+> ggplot(data=mergedist_data_nongeoph, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc nongeophagy species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")
+> ggplot(data=mergedist_data_nongeoph, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc nongeophagy species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+`geom_smooth()` using formula 'y ~ x'
+> geoph_dist_anova<-aov(ni~HubDist_km, data=mergedist_data_nongeoph)
+> geoph_dist_anova<-aov(ni~HubDist_km, data=distdata_geophagy)
+> summary(geoph_dist_anova)
+
+#geophagy species correlate ni~distance
+             Df Sum Sq Mean Sq F value  Pr(>F)   
+HubDist_km    1   52.5   52.48   8.546 0.00402 **
+Residuals   144  884.2    6.14                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+#non geophagy species
+> nongeoph_dist_anova<-aov(ni~HubDistn_km, data=mergedist_data_nongeoph)
+> summary(nongeoph_dist_anova)
+            Df Sum Sq Mean Sq F value  Pr(>F)   
+HubDist_km   1    439   438.5   7.798 0.00672 **
+Residuals   71   3993    56.2                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+
+#scatterplots geophagy vs non geophagy
+> library(readxl)
+> distance_by_points_excel_withdiet <- read_excel("~/Uni/Project/Data/distance by points_excel_withdiet.xlsx")
+> View(distance_by_points_excel_withdiet)
+> distance_by_points_excel_withdiet<-as.data.table(distance_by_points_excel_withdiet)
+> distance_by_points_excel_withdiet$Diet<-as.factor(distance_by_points_excel_withdiet$Diet)
+
+
+> ggplot(data=distance_by_points_excel_withdiet, mapping=aes(x=HubDist_km, y=nickel, color=Diet))+geom_point()+mytheme+labs(title="dist v ni by diet", x="Distance from Mine (km)", y="Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+
+#same but boxplot
+ggplot(data=distance_by_points_excel_withdiet)+geom_boxplot( aes(y=nickel, x=Diet))+labs(y="Ni Concentration (ng/ml)", title="Ni Conc by Diet")+mytheme
+
+
+> anova_diet<-aov(nickel~Diet, data=distance_by_points_excel_withdiet)
+> summary(anova_diet)
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+Diet          1   1833  1833.3   64.59 5.87e-14 ***
+Residuals   217   6159    28.4                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+> TukeyHSD(anova_diet)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = nickel ~ Diet, data = distance_by_points_excel_withdiet)
+
+$Diet
+                         diff      lwr     upr p adj
+NonGeophagy-Geophagy 5.808581 4.384103 7.23306     0
+
+
+#differences between years
+> TukeyHSD(year_anova)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = ni ~ CAP_YEAR, data = distance_by_points_excel)
+
+$CAP_YEAR
+                diff          lwr        upr     p adj
+2013-2012  4.1330417   0.58976161  7.6763217 0.0119568
+2014-2012  3.7427083   0.13160815  7.3538085 0.0373227
+2015-2012  4.8334375   0.78672650  8.8801485 0.0091874
+2016-2012  8.7241942   3.40039367 14.0479947 0.0000643
+2017-2012 -0.4191484  -4.60789219  3.7695955 0.9997317
+2014-2013 -0.3903333  -3.42661531  2.6459486 0.9990890
+2015-2013  0.7003958  -2.84288423  4.2436759 0.9929448
+2016-2013  4.5911525  -0.36079817  9.5431032 0.0864493
+2017-2013 -4.5521900  -8.25685446 -0.8475256 0.0065895
+2015-2014  1.0907292  -2.52037102  4.7018294 0.9535430
+2016-2014  4.9814858  -0.01921676  9.9821884 0.0515291
+2017-2014 -4.1618567  -7.93143884 -0.3922745 0.0210237
+2016-2015  3.8907567  -1.43304383  9.2145572 0.2903421
+2017-2015 -5.2525859  -9.44132969 -1.0638420 0.0051334
+2017-2016 -9.1433425 -14.57588859 -3.7107965 0.0000364
+
+
+> anova_soil<-aov(nickel~soil, data=lemurdatasoilandgeology)
+> summary(anova_soil)
+             Df Sum Sq Mean Sq F value Pr(>F)   
+soil          2    409   204.5   5.177 0.0066 **
+Residuals   165   6518    39.5                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+65 observations deleted due to missingness
+> TukeyHSD(anova_soil)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = nickel ~ soil, data = lemurdatasoilandgeology)
+
+$soil
+                                               diff        lwr       upr     p adj
+Piscolite-Armoured_Ferricrete             -4.216425 -7.3703132 -1.062536 0.0052763
+Red_Yellow_Ferricrete-Armoured_Ferricrete -2.017676 -5.0381625  1.002810 0.2572147
+Red_Yellow_Ferricrete-Piscolite            2.198749 -0.4080337  4.805531 0.1166595

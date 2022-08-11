@@ -1,0 +1,8 @@
+#set cature year as a factor (categorical variable)
+> class(lemur_data1$CAP_YEAR)
+[1] "numeric"
+> lemur_data1$CAP_YEAR<-as.factor(lemur_data1$CAP_YEAR)
+> class(lemur_data1$CAP_YEAR)
+[1] "factor"
+
+ggplot(data=lemur_data1)+geom_boxplot( aes(x=CAP_YEAR, y=Ni, fill=SPECIES))

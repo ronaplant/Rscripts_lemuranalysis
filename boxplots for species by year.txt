@@ -1,0 +1,90 @@
+#Author: Rona Plant (2021)
+
+
+install.packages("arrow")
+install.packages("data.table")
+
+#need to tell rstudio that I want to use the following packages
+library(data.table)
+library(ggplot2)
+library(tidyverse)
+
+#convert dataframe to data table
+lemur_data1<-as.data.table(lemur_data1)
+
+class(lemur_data1)
+
+#returns unique values in CAP_YEAR column
+unique(lemur_data1$CAP_YEAR)
+
+#filter to see samples taken in 2013
+lemur_data1[lemur_data1$CAP_YEAR==2013]
+
+#creates a new data table that returns only samples taken in 2013
+lemur_data_2013<-lemur_data1[lemur_data1$CAP_YEAR==2013]
+View(lemur_data_2013)
+
+#do this for each year
+> lemur_data_2012<-lemur_data1[lemur_data1$CAP_YEAR==2012]
+> lemur_data_2014<-lemur_data1[lemur_data1$CAP_YEAR==2014]
+> lemur_data_2015<-lemur_data1[lemur_data1$CAP_YEAR==2015]
+> lemur_data_2016<-lemur_data1[lemur_data1$CAP_YEAR==2016]
+> lemur_data_2017<-lemur_data1[lemur_data1$CAP_YEAR==2017]
+
+#create a boxplot for ni by species in year 2013
+boxplot(Ni~SPECIES, data=lemur_data_2013, main="Ni concentration by species year 2013", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+
+#repeat per year
+boxplot(Ni~SPECIES, data=lemur_data_2014, main="Ni Conc by Species: Year 2014", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+boxplot(Ni~SPECIES, data=lemur_data_2012, main="Ni Conc by Species: Year 2012", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+boxplot(Ni~SPECIES, data=lemur_data_2015, main="Ni Conc by Species: Year 2015", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+boxplot(Ni~SPECIES, data=lemur_data_2016, main="Ni Conc by Species: Year 2016", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+boxplot(Ni~SPECIES, data=lemur_data_2017, main="Ni Conc by Species: Year 2017", 
+    xlab="Lemur species", ylab="Ni concentration (ng/ml)")
+
+#set capture year as a factor (categorical variable) - to create multiple box plots in one large graphic
+> class(lemur_data1$CAP_YEAR)
+[1] "numeric"
+> lemur_data1$CAP_YEAR<-as.factor(lemur_data1$CAP_YEAR)
+> class(lemur_data1$CAP_YEAR)
+[1] "factor"
+
+ggplot(data=lemur_data1)+geom_boxplot( aes(x=CAP_YEAR, y=Ni, fill=SPECIES))
+
+#set a theme for data plots
+mytheme <- theme_minmal() + theme(panel.background = element_blank(),
+                                   panel.border = element_rect(colour = "black", fill = NA),
+                                   axis.text.x = element_text(size=10),
+                                   axis.text.y = element_text(size=10),
+                                   axis.title = element_text(size=12),
+                                   legend.position = "right")
+
+#add mytheme to the boxplot
+ggplot(data=lemur_data1)+geom_boxplot( aes(x=CAP_YEAR, y=Ni, fill=SPECIES))+mytheme
+
+#to change axis labels and add title, define the boxplot as an object
+boxplot1<-ggplot(data=lemur_data1)+geom_boxplot( aes(x=CAP_YEAR, y=Ni, fill=SPECIES))
+
+#change labels
+boxplot1+labs(x="Capture Year", y= "Nickel concentration (ng/ml)", title="Nickel concentration (ng/ml) per lemur species by capture year")
+
+#same data plotted as a scatterplot
+ggplot(data=lemur_data1)+geom_point( aes(x=CAP_YEAR, y=Ni, fill=SPECIES))+mytheme
+
+#create a new data table for each species
+> unique(lemur_data1$SPECIES)
+[1] "P. diadema"    "A. laniger"    "L. mustelinus"
+[4] "I. indri"  
+
+data_laniger<-lemur_data1[lemur_data1$SPECIES == "A. laniger"]
+data_diadema<-lemur_data1[lemur_data1$SPECIES == "P. diadema"]
+data_indri<-lemur_data1[lemur_data1$SPECIES == "I. indri"]
+data_mustelinus<-lemur_data1[lemur_data1$SPECIES == "L. mustelinus"]
+
+#scatter plot of laniger data
+ggplot(data=data_laniger)+geom_point( aes(x=CAP_YEAR, y=Ni))

@@ -1,0 +1,67 @@
+library(data.table)
+library(ggplot2)
+library(tidyverse)
+
+> library(readxl)
+> lemurdatahubdistance <- read_excel("datasets/lemurdatahubdistance.xlsx")
+> View(lemurdatahubdistance)
+> lemurdatahubdistance<-as.data.frame(lemurdatahubdistance)
+
+#rename columns (hubdistance)
+names(lemurdatahubdistance)[names(lemurdatahubdistance)=="HubDist (km)"]<-"dist"
+names(lemurdatahubdistance)[names(lemurdatahubdistance)=="Ni__ng_ml_"]<-"nickel"
+
+> ggplot(data=lemur_distances2012, mapping=aes(x=distance_m, y=ni_ngml))+geom_point()
+
+#using color instead of fill adds colour to the plot
+> ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme
+
+
+#NEED to convert to data table first
+lemur_distances2012<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2012]
+lemur_distances2013<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2013]
+lemur_distances2014<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2014]
+lemur_distances2015<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2015]
+lemur_distances2016<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2016]
+lemur_distances2017<-lemurdatahubdistance[lemurdatahubdistance$CAP_YEAR==2017]
+
+ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme
+
+#adds smooth regression line
+ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth()
+
+#adds method to make linear regression line
+geom_smooth(method = "lm")
+=="Ni_
+ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+#grey shading around the line represents 95% confidence interval can remove using: geom_smooth(method = "lm", se = FALSE)
+
+ggplot(data=lemur_distances2013, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+ggplot(data=lemur_distances2014, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+ggplot(data=lemur_distances2015, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+ggplot(data=lemur_distances2016, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+ggplot(data=lemur_distances2017, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+
+#define each as an object
+splot2012<-ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm")
+
+splot2013<-ggplot(data=lemur_distances2013, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+splot2014<-ggplot(data=lemur_distances2014, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+splot2015<-ggplot(data=lemur_distances2015, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+splot2016<-ggplot(data=lemur_distances2016, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+splot2017<-ggplot(data=lemur_distances2017, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+splot2012<-ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+mytheme+geom_smooth(method = "lm", se = FALSE)
+
+splot2012+labs(title= "2012")
+splot2013+labs(title= "2013")
+splot2014+labs(title= "2014")
+splot2015+labs(title= "2015")
+splot2016+labs(title= "2016")
+splot2017+labs(title= "2017")
+
+ggplot(data=lemur_distances2012, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()
+ggplot(data=lemur_distances2013, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()
+ggplot(data=lemur_distances2014, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()
+ggplot(data=lemur_distances2015, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()
+ggplot(data=lemur_distances2016, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()
+ggplot(data=lemur_distances2017, mapping=aes(x=dist, y=nickel, color=SPECIES))+geom_point()+theme_bw()

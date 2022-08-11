@@ -1,0 +1,51 @@
+#distance bypoints scatter plots and anova tests
+
+> distance_by_points_excel <- read_excel("~/Uni/Project/Data/distance by points_excel.xlsx")
+> View(distance_by_points_excel)
+> class(distance_by_points_excel)
+[1] "data.table" "data.frame"
+> distance_by_points_excel$SPECIES<-as.factor(distance_by_points_excel$SPECIES)
+> class(distance_by_points_excel$SPECIES)
+[1] "factor"
+> names(distance_by_points_excel)[names(distance_by_points_excel)=="Ni__ng_ml_"]<-"ni"
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, COLOR=SPECIES))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, fill()=SPECIES))+geom_point()+mytheme
+Error: unexpected '=' in "ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, fill()="
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, fill=SPECIES))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES, xaxp(-1, 0, 1, 2, 3)))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES, xaxp(-0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3)))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc by species", x="Distanx"
++ 
++ )minemined
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")
+> distance_by_points_excel$CAP_YEAR<-as.factor(distance_by_points_excel$CAP_YEAR)
+> class(distance_by_points_excel$CAP_YEAR)
+[1] "factor"
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, fill=CAP_YEAR))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=CAP_YEAR))+geom_point()+mytheme
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=CAP_YEAR))+geom_point()+mytheme+labs(title="dist v ni by capture year", x="Distance from Mine (km)", y="Ni Concentration (ng/ml)")
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=CAP_YEAR))+geom_point()+mytheme+labs(title="dist v ni by capture year", x="Distance from Mine (km)", y="Ni Concentration (ng/ml)")+geom_smooth(method="lm")
+`geom_smooth()` using formula 'y ~ x'
+> ggplot(data=distance_by_points_excel, mapdisping=aes(x=HubDist_km, y=ni, color=CAP_YEAR))+geom_point()+mytheme+labs(title="dist v ni by capture year", x="Distance from Mine (km)", y="Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+`geom_smooth()` using formula 'y ~ x'
+> ggplot(data=distance_by_points_excel, mapping=aes(x=HubDist_km, y=ni, color=SPECIES))+geom_point()+mytheme+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)")+geom_smooth(method="lm", se=FALSE)
+`geom_smooth()` using formula 'y ~ x'
+> distance_anova<-aov(ni~HubDist_km, data=distance_by_points_excel)
+> summary(distance_anova)
+
+
+             Df Sum Sq Mean Sq F value Pr(>F)  
+HubDist_km    1    220  220.07   6.144 0.0139 *
+Residuals   217   7772   35.82                 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+> year_anova<-aov(ni~CAP_YEAR, data=distance_by_points_excel)
+> summary(year_anova)
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+CAP_YEAR      5   1245  248.90   7.857 8.26e-07 ***
+Residuals   213   6748   31.68                     
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1

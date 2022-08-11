@@ -1,0 +1,51 @@
+#Boxplots for soil and geological data
+
+library(data.table)
+library(ggplot2)
+
+> library(ggplot2)
+> lemurs_geology<-as.data.table(lemurs_geology)
+> lemurs_geology_gabbro<-lemurs_geology[lemurs_geology$geology==Gabbro]
+Error in .checkTypos(e, names_x) : 
+  Object 'Gabbro' not found amongst fid, TVY_NUMBER, ALT_ID, SPECIES, GROUP and 35 more
+> lemurs_geology_gabbro<-lemurs_geology[lemurs_geology$geology=="Gabbro"]
+> view(lemurs_geology_gabbro)
+> class(lemurs_geology$geology)
+[1] "character"
+> lemurs_geology$geology<-as.factor(lemurs_geology$geology)
+> class(lemurs_geology)
+[1] "data.table" "data.frame"
+> class(lemurs_geology$geology)
+[1] "factor"
+> ggplot(data=lemurs_geology)+geom_boxplot( aes(x=geology, y=Ni__ng_ml_, fill=SPECIES))
+Warning message:
+Removed 17480 rows containing non-finite values (stat_boxplot). 
+> View(lemur_data)
+> boxplot_geology<-ggplot(data=lemurs_geology)+geom_boxplot( aes(x=geology, y=Ni__ng_ml_, fill=SPECIES))
+> lemurdatasoilandgeology<-as.data.table(lemurdatasoilandgeology)
+> class(lemurdatasoilandgeology$soil)
+[1] "character"
+> lemurdatasoilandgeology$soil<-as.factor(lemurdatasoilandgeology$soil)
+> boxplot_soil<-ggplot(data=lemurdatasoilandgeology)+geom_boxplot( aes(x=soil, y=Ni__ng_ml_, fill=SPECIES))
+> view(boxplot_soil),
+Error in as.data.frame.default(x[[i]], optional = TRUE) : 
+  cannot coerce class ‘c("LayerInstance", "Layer", "ggproto", "gg")’ to a data.frame
+> View(boxplot_soil)
+> ggplot(data=lemurdatasoilandgeology)+geom_boxplot( aes(x=soil, y=Ni__ng_ml_, fill=SPECIES))
+> library(readxl)
+> Copy_of_datasheet_forrstudio <- read_excel("~/Uni/Project/Copy of datasheet_forrstudio.xlsx")
+> View(Copy_of_datasheet_forrstudio)
+> class(Copy_of_datasheet_forrstudio$`capture year`)
+[1] "numeric"
+> Copy_of_datasheet_forrstudio$`capture year`<-as.factor(Copy_of_datasheet_forrstudio$`capture year`)
+> ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x='capture year', y=Conc. of  Ni          -ug/g-, fill=Species))
+Error: unexpected symbol in "ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x='capture year', y=Conc. of"
+> names(Copy_of_datasheet_forrstudio)[names(Copy_of_datasheet_forrstudio)=="Conc. of  Ni          -ug/g-"]<-"nickel"
+> ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x='capture year', y=nickel, fill=Species))
+> class(Copy_of_datasheet_forrstudio$`capture year`)
+[1] "factor"
+> ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x='capture year', y=nickel, fill=Species))
+> ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x=capture year, y=nickel, fill=Species))
+Error: unexpected symbol in "ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x=capture year"
+> names(Copy_of_datasheet_forrstudio)[names(Copy_of_datasheet_forrstudio)=="capture year"]<-"year"
+> ggplot(data=Copy_of_datasheet_forrstudio)+geom_boxplot( aes(x=year, y=nickel, fill=Species))

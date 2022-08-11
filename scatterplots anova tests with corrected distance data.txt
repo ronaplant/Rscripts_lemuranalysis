@@ -1,0 +1,216 @@
+library(tidyverse)
+library(ggplot2)
+
+#convert data sets from data tables to data frames
+
+> library(readxl)
+> minedistance_ALLDATA <- read_excel("~/Uni/Project GIS Workfolder/minedistance_ALLDATA.xlsx")
+> View(minedistance_ALLDATA)
+> minedistance_ALLGEOPH<-as.data.frame(minedistance_ALLGEOPH)
+> class(minedistance_ALLGEOPH)
+[1] "data.frame"
+> minedistance_ALLNONGEOPH<-as.data.frame(minedistance_ALLNONGEOPH)
+> class(minedistance_ALLNONGEOPH)
+[1] "data.frame"
+> minedistance_ALLDATA<-as.data.frame(minedistance_ALLDATA)
+> class(minedistance_ALLDATA)
+[1] "data.frame"
+
+#convert variable to factor
+
+> minedistance_ALLDATA$Diet<-as.factor(minedistance_ALLDATA$Diet)
+> class(minedistance_ALLDATA$Diet)
+[1] "factor"
+
+minedistance_ALLGEOPH$SPECIES<-as.factor(minedistance_ALLGEOPH$SPECIES)
+minedistance_ALLNONGEOPH$SPECIES<-as.factor(minedistance_ALLNONGEOPH$SPECIES)
+
+#rename key columns for each data frame
+
+names(minedistance_ALLDATA)[names(minedistance_ALLDATA)=="Ni__ng_ml_"]<-"ni"
+names(minedistance_ALLGEOPH)[names(minedistance_ALLGEOPH)=="Ni__ng_ml_"]<-"ni"
+names(minedistance_ALLNONGEOPH)[names(minedistance_ALLNONGEOPH)=="Ni__ng_ml_"]<-"ni"
+
+
+
+#generate scatterplots
+#define axis limits with +xlim(a, b) +ylim(a, b)
+#add labels using +labs()
+
+ggplot(data=minedistance_ALLDATA, mapping=aes(x=HubDist, y=ni, color=Diet))+geom_point()+mytheme
+
+> ggplot(data=minedistance_ALLDATA, mapping=aes(x=HubDist, y=ni, color=Diet))+geom_point()+mytheme+xlim(-1, 5)+ylim(0, 40)+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)
+ggplot(data=minedistance_ALLDATA, mapping=aes(x=HubDist, y=ni, color=Diet))+geom_point()+mytheme+xlim(-1, 5)+ylim(0, 40)+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)
+
+#graph using cobalt concentration
+ggplot(data=minedistance_ALLDATA, mapping=aes(x=HubDist, y=Co__ng_mL_, color=Diet))+geom_point()+mytheme+xlim(-1, 5)+labs(title="distance v cobalt conc by species", x="Distance from Mine (km)", y= "Co Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)
+
+#one for iron
+ggplot(data=minedistance_ALLDATA, mapping=aes(x=HubDist, y=Fe___ug_dL, color=Diet))+geom_point()+mytheme+xlim(-1, 5)+labs(title="distance v iron conc by species", x="Distance from Mine (km)", y= "Fe Concentration (ug/dL)") +geom_smooth(method="lm", se=FALSE)
+
+
+ggplot(data=minedistance_ALLGEOPH, mapping=aes(x=HubDist, y=ni, color=SPECIES))+geom_point()+mytheme+xlim(-1, 5)+ylim(0, 40)+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)
+ggplot(data=minedistance_ALLNONGEOPH, mapping=aes(x=HubDist, y=ni, color=SPECIES))+geom_point()+mytheme+xlim(-1, 5)+ylim(0, 40)+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)
+
+
+#anova tests 
+alldata_anova<-aov(ni~HubDist, data=minedistance_ALLDATA)
+summary(alldata_anova)
+             Df Sum Sq Mean Sq F value  Pr(>F)   
+HubDist       1    323   322.9    9.29 0.00252 **
+Residuals   291  10114    34.8                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1    # maybe ignore as i dont know what it means?
+
+
+> alldata_anova_diet<-aov(ni~Diet, data=minedistance_ALLDATA)
+> summary(alldata_anova_diet)
+             Df Sum Sq Mean Sq F value Pr(>F)    
+Diet          1   3028  3027.8   118.9 <2e-16 ***
+Residuals   291   7409    25.5                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#trying to find gradient of regression lines to look at the relationship
+ggplot(data=minedistance_ALLNONGEOPH, mapping=aes(x=HubDist, y=ni, color=SPECIES))+geom_point()+mytheme+xlim(-1, 5)+ylim(0, 40)+labs(title="distance v ni conc by species", x="Distance from Mine (km)", y= "Ni Concentration (ng/ml)") +geom_smooth(method="lm", se=FALSE)+annotate(geom="text", x=1, y=40, label=lm_eqn(minedistance_ALLNONGEOPH, minedistance_ALLNONGEOPH$ni, minedistance_ALLNONGEOPH$HubDist), parse=TRUE)
+
+#simple correlation test
+> cor(minedistance_ALLGEOPH$ni, minedistance_ALLGEOPH$HubDist)
+[1] 0.05284031
+#5.28% correlation between nickel conc and distance to mine in geophagic species
+
+cor(minedistance_ALLNONGEOPH$ni, minedistance_ALLNONGEOPH$HubDist)
+[1] 0.1428205
+#14.3% correlation between ni conc and distance to mine in non geophagic species
+
+#overall anova for non and geo and then by species for each
+
+> nongeophagic_anova<-aov(ni~HubDist, data=minedistance_ALLNONGEOPH)
+> summary(nongeophagic_anova)
+             Df Sum Sq Mean Sq F value
+HubDist       1    121  121.29   2.082
+Residuals   100   5825   58.25        
+            Pr(>F)
+HubDist      0.152
+Residuals
+# no significant difference, correlation is high 14.3%, positive trend, ie concentration increasing with distance?
+
+> geophagic_anova<-aov(ni~HubDist, data=minedistance_ALLGEOPH)
+> summary(geophagic_anova)
+             Df Sum Sq Mean Sq F value Pr(>F)
+HubDist       1    4.1   4.083   0.529  0.468
+Residuals   189 1458.4   7.717  
+# means there is no sig diff between ni and dist --> because rather there is correlation between these values
+
+
+> TukeyHSD(alldata_anova_diet)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = ni ~ Diet, data = minedistance_ALLDATA)
+
+$Diet
+                           diff      lwr      upr p adj
+NonGeophagic-Geophagic 6.748093 5.530213 7.965973     0
+
+
+> geophagic_anova_species<-aov(ni~SPECIES, data=minedistance_ALLGEOPH)
+> summary(geophagic_anova_species)
+             Df Sum Sq Mean Sq F value   Pr(>F)    
+SPECIES       1  243.3  243.31   37.72 4.72e-09 ***
+Residuals   189 1219.2    6.45                     
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# this means there is a significant difference in the nickel concentration values between the 2 species that are geophagic
+
+> nongeophaic_anova_species<-aov(ni~SPECIES, data=minedistance_ALLNONGEOPH)
+> summary(nongeophaic_anova_species)
+             Df Sum Sq Mean Sq F value Pr(>F)
+SPECIES       1      1    1.22   0.021  0.886
+Residuals   100   5945   59.45 
+# this means there is no significant difference between the nickel levels in the 2 nongeophagic species
+
+
+> TukeyHSD(geophagic_anova_species)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = ni ~ SPECIES, data = minedistance_ALLGEOPH)
+
+$SPECIES
+                         diff       lwr       upr p adj
+P. diadema-I. indri -2.258848 -2.984369 -1.533327     0
+
+> TukeyHSD(geophagic_anova_species)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = ni ~ SPECIES, data = minedistance_ALLGEOPH)
+
+$SPECIES
+                         diff       lwr       upr p adj
+P. diadema-I. indri -2.258848 -2.984369 -1.533327     0
+##not 100% sure what these values actually mean lmao
+
+
+
+alldata_anova_species<-aov(ni~SPECIES, data=minedistance_ALLDATA)
+
+> TukeyHSD(alldata_anova_species)
+  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = ni ~ SPECIES, data = minedistance_ALLDATA)
+
+$SPECIES
+                               diff        lwr        upr     p adj
+I. indri-A. laniger      -5.4820026  -7.639131 -3.3248743 0.0000000
+L. mustelinus-A. laniger  0.2208624  -2.351298  2.7930226 0.9961389
+P. diadema-A. laniger    -7.7408506  -9.868286 -5.6134147 0.0000000
+L. mustelinus-I. indri    5.7028651   3.344628  8.0611021 0.0000000
+P. diadema-I. indri      -2.2588480  -4.121979 -0.3957168 0.0102492
+P. diadema-L. mustelinus -7.9617130 -10.292821 -5.6306054 0.0000000
+
+#this shows the not-so-sig-differences when species of same diet are compared, whereas differences are seen between species with differing diets
+
+#i want to see if there is a significant difference betweeen the relationship of ni v dist between geophagic and non geophagic species
+
+
+
+#chi square tests: p<0.05 means correlation shared between variables
+chisq.test(minedistance_ALLDATA$ni, minedistance_ALLDATA$distance)
+
+	Chi-squared test for given probabilities
+
+data:  minedistance_ALLDATA$ni
+X-squared = 1451.2, df = 292, p-value < 2.2e-16
+
+> chisq.test(minedistance_ALLDATA$ni, minedistance_ALLDATA$Diet)
+
+	Pearson's Chi-squared test
+
+data:  minedistance_ALLDATA$ni and minedistance_ALLDATA$Diet
+X-squared = 270.23, df = 197, p-value = 0.0004129
+
+
+
+> chisq.test(minedistance_ALLGEOPH$ni, minedistance_ALLGEOPH$HubDist)
+
+	Pearson's Chi-squared test
+
+data:  minedistance_ALLGEOPH$ni and minedistance_ALLGEOPH$HubDist
+X-squared = 22236, df = 21710, p-value = 0.006115
+
+#means that there is a correlation between nicekl conc and distance in geophagic samples, these variables are dependant of eachother
+
+
+> chisq.test(minedistance_ALLNONGEOPH$ni, minedistance_ALLNONGEOPH$HubDist)
+
+	Pearson's Chi-squared test
+
+data:  minedistance_ALLNONGEOPH$ni and minedistance_ALLNONGEOPH$HubDist
+X-squared = 6400.5, df = 5986, p-value = 0.0001035
+
+#these values can be compared to look at the difference between the relationship between ni and dist accor5ding to diet
+
